@@ -23,9 +23,27 @@ import http from "node:http"
 const users = []
 
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
 
    const { method, url } = req
+
+
+   const buffers = []
+
+    for await (const chunck of req) {
+        buffers.push(chunck)
+    }
+
+   //  const body = JSON.parse(Buffer.concat(buffers).toString())
+
+    try {
+      req.body = JSON.parse(Buffer.concat(buffers).toString())
+
+    } catch {
+      req.body = null
+    }
+
+   //  console.log(body)
 
    if(method === "GET" && url === "/users") {
       // return res.end("Listagem de usuários")
@@ -34,10 +52,12 @@ const server = http.createServer((req, res) => {
 
    if(method === "POST" && url === "/users") {
 
+      const { name, email } = req.body
+
       users.push({
          id: 1,
-         nome: "John Wick",
-         email: "johnwick@tesst.com"
+         name,
+         email,
       })
       return res.writeHead(201).end("Criação de usuários")
    }
