@@ -1,5 +1,6 @@
 import http from "node:http"
 import { json } from "./middlewares/json.js"
+import { Database } from "./database.js"
 
 // - Criar usuário
 // - Listagem de usuários
@@ -21,8 +22,7 @@ import { json } from "./middlewares/json.js"
 //PATCH => Atualizar uma informação específica no back-end
 //DELETE => Deletar uma informação no back-end
 
-const users = []
-
+const database = new Database()
 
 const server = http.createServer(async (req, res) => {
 
@@ -34,6 +34,8 @@ const server = http.createServer(async (req, res) => {
    //  console.log(body)
 
    if(method === "GET" && url === "/users") {
+
+      const users = database.select('users')
       // return res.end("Listagem de usuários")
       return res.end(JSON.stringify(users))
    }
@@ -42,11 +44,15 @@ const server = http.createServer(async (req, res) => {
 
       const { name, email } = req.body
 
-      users.push({
+      const user = {
          id: 1,
          name,
          email,
-      })
+      }
+
+      database.insert('users', user)
+
+
       return res.writeHead(201).end("Criação de usuários")
    }
 
