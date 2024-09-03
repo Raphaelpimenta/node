@@ -26,7 +26,21 @@ import { routes } from "./routes.js"
 //PATCH => Atualizar uma informação específica no back-end
 //DELETE => Deletar uma informação no back-end
 
-// const database = new Database()
+
+
+
+//Formas do Front-end enviar informações
+
+// Query Parameters: URL Stateful => Filtros, paginação, não-obrigatórios
+// Route Parameters: Identificação de rescurso
+// Request Body: Envio de informações de um formulário 
+
+// http//localhost:3333/users?userId=1&name=Raphael
+
+// GET http//localhost:3333/users/1
+// DELETE http//localhost:3333/users/1
+
+// POST http//localhost:3333/users
 
 const server = http.createServer(async (req, res) => {
 
